@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf, etiqueta, destino, lineas %}
+{% block titulo %}Cancelar · {{ destino(p) }}{% endblock %}
+{% block contenido %}
+<section class="tarjeta">
+  <div class="fila"><b class="morado">Pedido #{{ p.id }}</b>{{ etiqueta(p.estado) }}</div>
+  {{ lineas(p) }}
+  <div class="total"><span>Total</span><b class="peligro">{{ p.total|pesos }}</b></div>
+</section>
+<form method="post" action="{{ url_for('pedidos.cancelar', id_=p.id) }}">
+  {{ csrf() }}
+  {% if p.estado == 'EN_PREPARACION' %}
+  <div class="aviso alerta"><b>Cocina ya inició la preparación.</b><br>
+    <label class="casilla"><input type="checkbox" name="confirmado" value="1"> Deseo cancelar igualmente</label></div>
+  {% endif %}
+  <label for="motivo">Motivo de la cancelación</label>
+  <textarea id="motivo" name="motivo" maxlength="200" data-contador>{{ motivo }}</textarea>
+  <button class="boton rojo">Solicitar autorización</button>
+</form>
+<a class="boton gris" href="{{ volver }}">Volver al pedido</a>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf %}
+{% block titulo %}Autorización{% endblock %}
+{% block contenido %}
+<div class="centro"><div class="logo">🔒</div><h2>Clave del administrador</h2>
+<p class="suave">Se necesita para cancelar el pedido #{{ p.id }}</p></div>
+<form method="post" action="{{ url_for('pedidos.autorizar', id_=p.id) }}">
+  {{ csrf() }}
+  <input type="hidden" name="motivo" value="{{ motivo }}">
+  <input type="hidden" name="confirmado" value="{{ 1 if confirmado else 0 }}">
+  <label for="clave">Clave</label>
+  <input type="password" id="clave" name="clave" autocomplete="off" required>
+  <div class="tarjeta"><small>Motivo registrado</small>{{ motivo }}</div>
+  <p class="suave">Tras 3 intentos fallidos se bloquea la acción.</p>
+  <button class="boton rojo">Confirmar cancelación</button>
+</form>
+<a class="boton" href="{{ volver }}">Volver al pedido</a>
+{% endblock %}

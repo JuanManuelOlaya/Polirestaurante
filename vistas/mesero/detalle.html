@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf, etiqueta, destino, lineas %}
+{% block titulo %}Pedido #{{ p.id }}{% endblock %}
+{% block contenido %}
+<div id="vivo">
+  <section class="tarjeta">
+    <div class="fila"><b class="morado">{{ destino(p) }}</b>{{ etiqueta(p.estado) }}</div>
+    {{ lineas(p) }}
+    <div class="total"><span>Total</span><b>{{ p.total|pesos }}</b></div>
+    {% if p.hora_listo %}<small>Hora de listo: {{ p.hora_listo|hora }}</small>{% endif %}
+    {% if p.hora_entrega %}<small> · Entregado: {{ p.hora_entrega|hora }}</small>{% endif %}
+  </section>
+  {% if p.estado == 'LISTO' %}
+  <button type="button" class="boton verde-b" data-abrir="confirmar">Marcar como entregado</button>
+  {% endif %}
+  {% if p.estado == 'ENTREGADO' %}<div class="aviso ok">Entregado. Cobro habilitado en caja.</div>{% endif %}
+  {% if ESTADOS[p.estado].cancelable %}
+  <a class="boton rojo" href="{{ url_for('pedidos.cancelar', id_=p.id) }}">Cancelar pedido</a>
+  {% endif %}
+</div>
+<dialog id="confirmar">
+  <h3>Confirmar entrega</h3>
+  <p>¿El pedido #{{ p.id }} ya fue entregado ({{ destino(p) }})?</p>
+  <form method="post" action="{{ url_for('mesero.entregar', id_=p.id) }}" class="dos">
+    {{ csrf() }}
+    <button type="button" class="boton gris" data-cerrar>Cancelar</button>
+    <button class="boton verde-b">Confirmar</button>
+  </form>
+</dialog>
+<a class="boton gris" href="{{ url_for('mesero.mis_pedidos') }}">Volver a mis pedidos</a>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% from "macros.html" import destino, etiqueta %}
+{% block titulo %}Cancelaciones{% endblock %}
+{% block contenido %}
+<div id="vivo">
+  {% for p in pedidos %}
+  <a class="tarjeta" href="{{ url_for('pedidos.cancelar', id_=p.id) }}">
+    <div class="fila"><b class="morado">{{ destino(p) }}</b><small>#{{ p.id }}</small></div>
+    <div class="fila">{{ etiqueta(p.estado) }}<small>Mesero: {{ p.mesero }}</small></div></a>
+  {% else %}<p class="centro suave">No hay pedidos que se puedan cancelar</p>{% endfor %}
+</div>
+{% endblock %}

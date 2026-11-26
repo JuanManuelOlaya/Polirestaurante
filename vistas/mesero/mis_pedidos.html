@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% from "macros.html" import etiqueta, destino %}
+{% block titulo %}Mis pedidos{% endblock %}
+{% block contenido %}
+<div id="vivo">
+  {% for p in pedidos %}
+  <a class="tarjeta {% if p.estado == 'LISTO' %}resaltado{% endif %}" href="{{ url_for('mesero.detalle', id_=p.id) }}">
+    <div class="fila"><b class="morado">{{ destino(p) }}</b><small>#{{ p.id }}</small></div>
+    {{ etiqueta(p.estado) }}
+    <div class="fila"><small>{% for d in p.detalles %}{{ d.cantidad }}x {{ d.nombre_producto }}{{ ', ' if not loop.last }}{% endfor %}</small>
+      {% if p.estado == 'LISTO' %}<b class="verde">¡Listo para servir!</b>{% endif %}</div>
+  </a>
+  {% else %}
+  <p class="centro suave">No tiene pedidos activos</p>
+  {% endfor %}
+  <p class="centro suave">Solo pedidos que no están pagados ni cancelados</p>
+</div>
+{% endblock %}

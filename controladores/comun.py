@@ -5,6 +5,7 @@ from functools import wraps
 
 from flask import abort, current_app, flash, g, jsonify, redirect, request, session, url_for
 
+from modelos.estados import ESTADOS
 from servicios.errores import ErrorNegocio, pesos
 
 
@@ -78,3 +79,4 @@ def registrar_comunes(app):
         return respuesta
 
     app.jinja_env.filters.update(pesos=pesos, minutos=minutos, hora=lambda f: f[11:16] if f else "")
+    app.jinja_env.globals.update(ESTADOS=ESTADOS)
