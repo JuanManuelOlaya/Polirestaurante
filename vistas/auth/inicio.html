@@ -15,6 +15,8 @@
   {{ opcion(url_for('mesero.mesas'), 'Mesas', 'Disponibles y ocupadas') }}
   {{ opcion(url_for('mesero.menu'), 'Menú', 'Precios y disponibilidad') }}
   {{ opcion(url_for('mesero.mis_pedidos'), 'Mis pedidos', 'Estado de cada pedido', contador) }}
+{% elif rol == 'COCINA' %}
+  {{ opcion(url_for('cocina.pedidos'), 'Pedidos entrantes', 'En orden de llegada y detalle', contador) }}
 {% elif rol == 'ADMINISTRADOR' %}
   {{ opcion(url_for('admin.cancelaciones'), 'Autorizar cancelaciones', 'Con clave del administrador') }}
   {{ opcion(url_for('admin.menu'), 'Gestión del menú', 'Productos y disponibilidad') }}

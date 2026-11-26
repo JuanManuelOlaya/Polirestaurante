@@ -7,7 +7,7 @@ from flask import Flask
 
 import config
 from controladores import admin_controller, api_controller, auth_controller
-from controladores import mesero_controller, pedido_controller
+from controladores import cocina_controller, mesero_controller, pedido_controller
 from controladores.comun import registrar_comunes
 from database import datos_iniciales
 from database.conexion import BaseDatos
@@ -41,7 +41,7 @@ def crear_app(ruta_bd=config.RUTA_BD):
         "productos": ProductoService(bd),
     }
     registrar_comunes(app)
-    for modulo in (auth_controller, mesero_controller,
+    for modulo in (auth_controller, mesero_controller, cocina_controller,
                    admin_controller, pedido_controller, api_controller):
         app.register_blueprint(modulo.bp)
     return app

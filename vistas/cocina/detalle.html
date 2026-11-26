@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf, etiqueta, destino, lineas %}
+{% block titulo %}Detalle #{{ p.id }}{% endblock %}
+{% block contenido %}
+<div id="vivo">
+  {% if p.estado == 'CANCELADO' %}
+  <div class="aviso error">El pedido #{{ p.id }} fue cancelado. El pedido ya no está vigente.</div>
+  {% else %}
+  <section class="tarjeta">
+    <div class="fila"><b class="morado">{{ destino(p) }}</b>{{ etiqueta(p.estado) }}</div>
+    {{ lineas(p, false) }}
+    <small>Mesero: {{ p.mesero }} · Recibido {{ p.fecha_creacion|hora }} · Llegada {{ p.numero_llegada }}</small>
+  </section>
+  {% set accion = {'RECIBIDO':('iniciar','🔥 Iniciar Preparación'),'EN_PREPARACION':('listo','✅ Marcar como Listo'),'LISTO':('devolver','↩ Devolver a preparación')}.get(p.estado) %}
+  {% if accion %}<form method="post" action="{{ url_for('cocina.cambiar', id_=p.id, accion=accion[0]) }}">{{ csrf() }}
+    <input type="hidden" name="volver" value="detalle"><button class="boton">{{ accion[1] }}</button></form>{% endif %}
+  {% endif %}
+</div>
+<a class="boton gris" href="{{ url_for('cocina.pedidos') }}">Volver a pedidos entrantes</a>
+{% endblock %}
