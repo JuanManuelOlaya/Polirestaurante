@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf, etiqueta, destino %}
+{% block titulo %}Cocina (KDS){% endblock %}
+{% block insignia %}<span class="insignia" id="activos">🔥 {{ activos }} Activos</span>{% endblock %}
+{% block contenido %}
+<div class="filtros">
+  <button type="button" class="activo" data-filtro="">Todos</button>
+  {% for e in ['RECIBIDO','EN_PREPARACION','LISTO'] %}
+  <button type="button" data-filtro="{{ e }}">{{ ESTADOS[e].nombre }}</button>{% endfor %}
+</div>
+<input type="search" id="filtrar" class="buscador" placeholder="🔍 Buscar orden o mesa...">
+<div id="vivo" class="rejilla" data-activos="{{ activos }}">
+  {% for p in pedidos %}
+  <article class="tarjeta orden" data-estado="{{ p.estado }}" data-texto="#{{ p.id }} {{ destino(p)|lower }}">
+    <div class="fila"><span><span class="chip morado-c">{{ destino(p) }}</span> <small class="en-linea">#{{ p.id }} · llegada {{ p.numero_llegada }}</small></span>{{ etiqueta(p.estado) }}</div>
+    <ul class="lineas">{% for d in p.detalles %}<li><span>{{ d.cantidad }}x {{ d.nombre_producto }}</span><small>{{ d.nota }}</small></li>{% endfor %}</ul>
+    {% if p.nota_general %}<div class="aviso alerta"><b>Nota:</b> {{ p.nota_general }}</div>{% endif %}
+    <div class="fila"><small>🕒 {% if p.estado == 'EN_PREPARACION' %}En cocina hace {{ p.hora_inicio|minutos }} min{% else %}Hace {{ p.fecha_creacion|minutos }} min{% endif %}</small><small>Mesero: {{ p.mesero }}</small></div>
+    {% set accion = {'RECIBIDO':('iniciar','🔥 Iniciar Preparación'),'EN_PREPARACION':('listo','✅ Marcar como Listo'),'LISTO':('devolver','↩ Devolver a preparación')}[p.estado] %}
+    <form method="post" action="{{ url_for('cocina.cambiar', id_=p.id, accion=accion[0]) }}">{{ csrf() }}
+      <button class="boton {% if p.estado == 'LISTO' %}gris{% endif %}">{{ accion[1] }}</button></form>
+    <a class="enlace" href="{{ url_for('cocina.detalle', id_=p.id) }}">Ver detalle completo</a>
+  </article>
+  {% else %}<p class="centro suave">No hay pedidos pendientes</p>{% endfor %}
+</div>
+{% endblock %}
