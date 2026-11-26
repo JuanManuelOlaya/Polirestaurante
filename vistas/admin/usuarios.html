@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf %}
+{% block titulo %}Usuarios{% endblock %}
+{% block contenido %}
+<form method="post" class="tarjeta">{{ csrf() }}
+  <b>Agregar usuario</b>
+  <input name="nombre" placeholder="Nombre completo">
+  <input name="username" placeholder="Usuario" maxlength="70" autocomplete="off">
+  <input name="password" type="password" placeholder="Contraseña (mínimo 8)" autocomplete="new-password">
+  <select name="rol"><option value="MESERO">Mesero</option><option value="COCINA">Cocina</option><option value="ADMINISTRADOR">Administrador</option></select>
+  <button class="boton">Guardar</button>
+</form>
+{% for u in usuarios %}
+<article class="tarjeta {% if not u.activo %}apagado{% endif %}">
+  <div class="fila"><span><b>{{ u.nombre }}</b><small>{{ u.username }} · {{ u.rol.value|capitalize }}</small></span>
+    <form method="post" action="{{ url_for('admin.modificar_usuario', rol=u.rol.value, id_=u.id) }}">{{ csrf() }}
+      <button class="mini" name="accion" value="{{ 'desactivar' if u.activo else 'activar' }}">{{ 'Desactivar' if u.activo else 'Activar' }}</button></form></div>
+  <form method="post" class="en-fila" action="{{ url_for('admin.modificar_usuario', rol=u.rol.value, id_=u.id) }}">{{ csrf() }}
+    <input type="password" name="password" placeholder="Nueva contraseña" autocomplete="new-password"><button class="mini" name="accion" value="clave">Cambiar</button></form>
+</article>
+{% endfor %}
+{% endblock %}

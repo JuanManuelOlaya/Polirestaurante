@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf %}
+{% set rol = g.usuario.rol.value %}
+{% block titulo %}{{ {'MESERO':'Mesero','COCINA':'Cocina','ADMINISTRADOR':'Administrador'}[rol] }}{% endblock %}
+{% macro opcion(url, titulo, texto, numero=0) %}
+<a class="tarjeta opcion" href="{{ url }}"><span class="inicial">{{ titulo[0] }}</span>
+  <span><b>{{ titulo }}</b><small>{{ texto }}</small></span>
+  {% if numero %}<span class="contador">{{ numero }}</span>{% endif %}</a>
+{% endmacro %}
+{% block contenido %}
+<p class="suave">Hola, {{ g.usuario.nombre }}</p>
+<div id="vivo">
+{% if rol == 'ADMINISTRADOR' %}
+  {{ opcion(url_for('admin.usuarios'), 'Usuarios', 'Cuentas y roles') }}
+{% else %}
+  <p class="suave">Módulo en construcción.</p>
+{% endif %}
+</div>
+<form method="post" action="{{ url_for('auth.logout') }}">{{ csrf() }}<button class="boton pie">Cerrar sesión</button></form>
+{% endblock %}

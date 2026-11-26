@@ -1,0 +1,62 @@
+:root{--morado:#8b5cf6;--oscuro:#6d28d9;--tinta:#111827;--gris:#6b7280;--borde:#e5e7eb}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:#eef0f5;font-family:Inter,"Segoe UI",system-ui,sans-serif;color:var(--tinta)}
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:#fff;padding:14px 16px 32px}
+body:has(.rejilla) .app{max-width:980px}
+.rejilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:0 12px;align-items:start}
+.barra{display:flex;align-items:center;gap:12px;background:var(--morado);color:#fff;border-radius:18px;padding:14px 18px;margin-bottom:14px}
+.barra h1{font-size:1.15rem;margin:0;flex:1}.barra:not(:has(a)) h1{text-align:center}
+.hamburguesa{color:#fff;text-decoration:none;font-size:1.4rem}
+.insignia{background:var(--oscuro);border-radius:99px;padding:4px 10px;font-size:.8rem;font-weight:700}
+.centro{text-align:center}.suave{color:var(--gris);font-size:.85rem}.pie{margin-top:36px}
+.logo{width:64px;height:64px;border-radius:50%;background:#ede9fe;color:var(--oscuro);display:grid;place-items:center;font-weight:800;font-size:1.4rem;margin:20px auto 0}
+.logo.exito{background:#d1fae5;color:#047857;font-size:2rem}
+label{display:block;font-weight:600;font-size:.85rem;margin:12px 0 4px}
+input,select,textarea{width:100%;padding:11px 12px;border:1px solid #d1d5db;border-radius:10px;font:inherit;background:#fff}
+textarea{min-height:76px;resize:vertical}
+.casilla{display:flex;gap:8px;align-items:center}.casilla input{width:auto}
+.boton{display:block;width:100%;margin-top:12px;padding:13px;border:0;border-radius:99px;background:linear-gradient(90deg,#f3e8ff,#f0abfc);color:#3b0764;font:inherit;font-weight:700;text-align:center;text-decoration:none;cursor:pointer}
+.boton:disabled{opacity:.45;cursor:not-allowed}
+.boton.gris{background:#f3f4f6;color:#4b5563}.boton.rojo{background:linear-gradient(90deg,#ffe4e6,#fda4af);color:#9f1239}
+.boton.verde-b{background:linear-gradient(90deg,#d1fae5,#6ee7b7);color:#064e3b}
+.mini{display:inline-block;border:1px solid #ddd6fe;background:#f5f3ff;color:var(--oscuro);border-radius:99px;padding:6px 12px;font:600 .78rem inherit;cursor:pointer;text-decoration:none;white-space:nowrap}
+.tarjeta{display:block;border:1px solid var(--borde);border-radius:14px;padding:12px 14px;margin:10px 0;color:inherit;text-decoration:none;box-shadow:0 1px 3px #0000000a}
+.tarjeta small,.opcion small{display:block;color:var(--gris);font-size:.78rem}.tarjeta small.en-linea{display:inline}
+.tarjeta>input,.tarjeta>select{margin-top:8px}
+.fila{display:flex;justify-content:space-between;align-items:center;gap:10px}.fila>span>b,.fila>span>span.precio{display:block}
+.opcion{display:flex;gap:12px;align-items:center}
+.inicial{width:38px;height:38px;border-radius:10px;background:#ede9fe;color:var(--oscuro);display:grid;place-items:center;font-weight:800}
+.contador{margin-left:auto;background:#ede9fe;color:var(--oscuro);border-radius:99px;padding:2px 10px;font-weight:700;font-size:.8rem}
+.morado{color:var(--oscuro)}.verde{color:#047857}.peligro{color:#be123c}.precio{color:var(--oscuro);font-weight:700}
+.apagado{opacity:.55}.resaltado{border:2px solid #34d399;background:#ecfdf5}
+.chip{display:inline-block;border-radius:99px;padding:3px 11px;font-size:.75rem;font-weight:700;white-space:nowrap}
+.morado-c{background:#f3e8ff;color:var(--oscuro)}
+.e-RECIBIDO{background:#dbeafe;color:#1d4ed8}.e-EN_PREPARACION{background:#fef3c7;color:#92400e}.e-LISTO{background:#d1fae5;color:#047857}
+.e-ENTREGADO{background:#ede9fe;color:#5b21b6}.e-PAGADO{background:#e5e7eb;color:#374151}.e-CANCELADO{background:#ffe4e6;color:#be123c}
+.aviso{border-radius:10px;padding:10px 12px;margin:10px 0;font-size:.86rem;border:1px solid}
+.aviso.ok{background:#ecfdf5;border-color:#a7f3d0;color:#065f46}.aviso.error{background:#fff1f2;border-color:#fecdd3;color:#be123c}
+.aviso.alerta{background:#fffbeb;border-color:#fde68a;color:#92400e}
+.lineas{list-style:none;padding:8px 0;margin:6px 0;border-top:1px solid var(--borde);font-size:.88rem}
+.lineas li{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
+.total{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--borde);padding-top:10px;margin-top:10px}.total b{font-size:1.35rem}
+.buscador{background:#e5e7eb;border:0;border-radius:99px;margin-top:8px}
+.filtros{display:flex;gap:6px;flex-wrap:wrap}.filtros button{border:0;border-radius:99px;padding:7px 12px;background:#f3f4f6;font:600 .78rem inherit;cursor:pointer}
+.filtros button.activo{background:var(--morado);color:#fff}
+.segmentos{display:flex;gap:8px}.segmentos>*{flex:1;margin:0}
+.segmentos button,.segmentos span{display:block;width:100%;text-align:center;border:1px solid #d1d5db;background:#fff;border-radius:99px;padding:9px;font:600 .85rem inherit;cursor:pointer}
+.segmentos input{position:absolute;opacity:0;width:1px}
+.segmentos button.activo,.segmentos input:checked+span{background:var(--morado);border-color:var(--morado);color:#fff}
+.segmentos input:focus-visible+span{outline:3px solid #c4b5fd}
+.mesas{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mesa{border-radius:14px;padding:18px;text-align:center;text-decoration:none;display:flex;flex-direction:column}
+.mesa.DISPONIBLE{background:#ecfdf5;color:#065f46;border:2px solid #6ee7b7}.mesa.OCUPADA{background:#fff1f2;color:#9f1239;border:2px solid #fda4af}
+.item .cantidad{display:flex;align-items:center;gap:12px;background:#f3f4f6;border-radius:99px;padding:3px 8px}
+.item .cantidad button,.borrar{border:0;background:none;font:700 1rem inherit;cursor:pointer;padding:2px 8px}
+.item .cantidad input{width:48px;padding:2px;text-align:center;border:0;background:transparent}
+.item.agotado{border:2px solid #fb7185;background:#fff1f2}
+.en-fila{display:flex;gap:8px;align-items:center;margin-top:10px}
+.acciones{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.acciones form{margin:0}
+.enlace{display:block;text-align:center;margin-top:10px;font-size:.82rem;color:var(--oscuro)}
+dialog{border:0;border-radius:16px;padding:20px;max-width:320px;text-align:center}dialog::backdrop{background:#11182766}
+.dos{display:flex;gap:10px}
+@media print{.barra,.no-imprimir,.aviso{display:none!important}body,.app{background:#fff}}

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf" content="{{ session.csrf }}">
+  <title>PoliRestaurante</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+</head>
+<body {% if g.usuario %}data-sesion="1"{% endif %}>
+<main class="app">
+  <header class="barra">
+    {% if g.usuario %}<a href="{{ url_for('auth.inicio') }}" class="hamburguesa" aria-label="Menú principal">☰</a>{% endif %}
+    <h1>{% block titulo %}PoliRestaurante{% endblock %}</h1>
+    {% block insignia %}{% endblock %}
+  </header>
+  <div id="conexion" class="aviso error" hidden>
+    <b>Sin conexión con el servidor.</b>
+    <button type="button" id="reintentar" class="mini">Reintentar</button>
+  </div>
+  <div id="avisos" aria-live="polite"></div>
+  {% for categoria, mensaje in get_flashed_messages(with_categories=true) %}
+    <div class="aviso {{ categoria }}" role="status">{{ mensaje }}</div>
+  {% endfor %}
+  {% block contenido %}{% endblock %}
+</main>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>
