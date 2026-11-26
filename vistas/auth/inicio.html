@@ -10,7 +10,14 @@
 {% block contenido %}
 <p class="suave">Hola, {{ g.usuario.nombre }}</p>
 <div id="vivo">
-{% if rol == 'ADMINISTRADOR' %}
+{% if rol == 'MESERO' %}
+  {{ opcion(url_for('mesero.nuevo_pedido'), 'Nuevo pedido', 'Tomar y enviar a cocina') }}
+  {{ opcion(url_for('mesero.mesas'), 'Mesas', 'Disponibles y ocupadas') }}
+  {{ opcion(url_for('mesero.menu'), 'Menú', 'Precios y disponibilidad') }}
+  {{ opcion(url_for('mesero.mis_pedidos'), 'Mis pedidos', 'Estado de cada pedido', contador) }}
+{% elif rol == 'ADMINISTRADOR' %}
+  {{ opcion(url_for('admin.cancelaciones'), 'Autorizar cancelaciones', 'Con clave del administrador') }}
+  {{ opcion(url_for('admin.menu'), 'Gestión del menú', 'Productos y disponibilidad') }}
   {{ opcion(url_for('admin.usuarios'), 'Usuarios', 'Cuentas y roles') }}
 {% else %}
   <p class="suave">Módulo en construcción.</p>

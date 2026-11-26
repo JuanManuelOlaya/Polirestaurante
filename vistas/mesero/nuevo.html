@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block titulo %}<span id="titulo">Nuevo Pedido</span>{% endblock %}
+{% block contenido %}
+<div id="mensaje" role="alert"></div>
+<section class="tarjeta">
+  <label>Tipo de servicio</label>
+  <div class="segmentos">
+    <button type="button" data-tipo="SALON">Salón</button>
+    <button type="button" data-tipo="LLEVAR">Para llevar</button>
+  </div>
+  <div id="bloque-mesa" hidden><label for="mesa">Mesa</label><select id="mesa"></select></div>
+  <div id="bloque-cliente" hidden><label for="cliente">Nombre del cliente</label><input id="cliente" maxlength="70"></div>
+</section>
+<input type="search" id="buscar" class="buscador" placeholder="🔍 Buscar platillos o bebidas...">
+<div id="resultados"></div>
+<h3>Pedido</h3>
+<div id="carrito"></div>
+<label for="general">Notas especiales para Cocina:</label>
+<textarea id="general" maxlength="200" placeholder="Ej. Traer salsa extra, entregar todo junto..."></textarea>
+<div class="total"><span>Total estimado:</span><b id="total">$ 0</b></div>
+<button type="button" class="boton" id="enviar">🍴 Enviar a Cocina</button>
+<button type="button" class="boton gris" id="descartar">Descartar pedido</button>
+{% endblock %}
+{% block scripts %}
+<script>const ID_MESERO = {{ g.usuario.id }};</script>
+<script src="{{ url_for('static', filename='pedido.js') }}"></script>
+{% endblock %}

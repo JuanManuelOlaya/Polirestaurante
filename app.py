@@ -7,10 +7,14 @@ from flask import Flask
 
 import config
 from controladores import admin_controller, api_controller, auth_controller
+from controladores import mesero_controller, pedido_controller
 from controladores.comun import registrar_comunes
 from database import datos_iniciales
 from database.conexion import BaseDatos
 from servicios.auth_service import AuthService
+from servicios.mesa_service import MesaService
+from servicios.pedido_service import PedidoService
+from servicios.producto_service import ProductoService
 
 
 def _clave_secreta(carpeta):
@@ -30,9 +34,15 @@ def crear_app(ruta_bd=config.RUTA_BD):
     app.secret_key = _clave_secreta(os.path.dirname(os.path.abspath(ruta_bd)))
     app.config.update(SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE="Lax")
 
-    app.extensions["servicios"] = {"auth": AuthService(bd)}
+    mesas = MesaService(bd)
+    pedidos = PedidoService(bd, mesas)
+    app.extensions["servicios"] = {
+        "auth": AuthService(bd), "mesas": mesas, "pedidos": pedidos,
+        "productos": ProductoService(bd),
+    }
     registrar_comunes(app)
-    for modulo in (auth_controller, admin_controller, api_controller):
+    for modulo in (auth_controller, mesero_controller,
+                   admin_controller, pedido_controller, api_controller):
         app.register_blueprint(modulo.bp)
     return app
 

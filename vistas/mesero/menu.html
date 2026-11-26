@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block titulo %}Menú{% endblock %}
+{% block contenido %}
+<div id="vivo">
+  {% for p in productos %}
+  <article class="tarjeta fila {% if p.agotado %}apagado{% endif %}">
+    <span><small>{{ p.categoria }} · {{ p.presentacion }}</small><b>{{ p.nombre }}</b>
+      <span class="precio">{{ p.precio|pesos }}</span></span>
+    <span class="chip {{ 'e-CANCELADO' if p.agotado else 'e-LISTO' }}">{{ 'Agotado' if p.agotado else 'Disponible' }}</span>
+  </article>
+  {% else %}
+  <div class="tarjeta centro">No hay productos activos en este momento.
+    <a class="boton" href="">Reintentar</a></div>
+  {% endfor %}
+</div>
+{% endblock %}

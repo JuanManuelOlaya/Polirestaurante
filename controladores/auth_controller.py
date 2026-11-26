@@ -26,7 +26,12 @@ def login():
 @requiere()
 def inicio():
     """Menú según el rol (mockup CU-01)."""
+    pedidos = servicio("pedidos")
     contador = 0
+    if g.usuario.rol.value == "MESERO":
+        contador = len(pedidos.listar(id_mesero=g.usuario.id))
+    elif g.usuario.rol.value == "COCINA":
+        contador = len(pedidos.listar(["RECIBIDO", "EN_PREPARACION"]))
     return render_template("auth/inicio.html", contador=contador)
 
 

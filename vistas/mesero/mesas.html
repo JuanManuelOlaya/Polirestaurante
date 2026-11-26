@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block titulo %}Mesas{% endblock %}
+{% block contenido %}
+<div id="vivo" class="mesas">
+  {% for m in mesas %}
+  <a class="mesa {{ m.estado }}" href="{{ url_for('mesero.nuevo_pedido', mesa=m.id) }}">
+    <b>Mesa {{ '%02d' % m.numero }}</b><span>{{ m.estado|capitalize }}</span></a>
+  {% endfor %}
+</div>
+{% endblock %}

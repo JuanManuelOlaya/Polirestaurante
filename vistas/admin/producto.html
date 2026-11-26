@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf %}
+{% block titulo %}{{ 'Agregar producto' if id_ is none else 'Editar producto' }}{% endblock %}
+{% block contenido %}
+<form method="post" novalidate>
+  {{ csrf() }}
+  <label>Id</label><input name="id" inputmode="numeric" value="{{ d.get('id','') }}" {% if id_ is not none %}disabled{% endif %}>
+  <label>Nombre</label><input name="nombre" maxlength="80" value="{{ d.get('nombre','') }}">
+  <label>Categoría</label><select name="id_categoria">{% for c in categorias %}<option value="{{ c.id }}" {% if d.get('id_categoria')|string == c.id|string %}selected{% endif %}>{{ c.nombre }}</option>{% endfor %}</select>
+  <label>Presentación</label><select name="id_presentacion">{% for c in presentaciones %}<option value="{{ c.id }}" {% if d.get('id_presentacion')|string == c.id|string %}selected{% endif %}>{{ c.nombre }}</option>{% endfor %}</select>
+  <label>Unidades disponibles</label><input name="unidades" inputmode="numeric" value="{{ d.get('unidades','') }}">
+  <label>Precio</label><input name="precio" inputmode="numeric" value="{{ d.get('precio','') }}">
+  <button class="boton">Guardar</button>
+</form>
+<a class="boton gris" href="{{ url_for('admin.menu') }}">Volver</a>
+{% endblock %}
