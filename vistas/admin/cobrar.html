@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% from "macros.html" import csrf, destino, lineas %}
+{% block titulo %}Caja · {{ destino(p) }}{% endblock %}
+{% block contenido %}
+<section class="tarjeta">
+  <b class="morado">Pedido #{{ p.id }} · Entregado</b>
+  {{ lineas(p) }}
+  <div class="total"><span>Total a pagar</span><b>{{ p.total|pesos }}</b></div>
+</section>
+<form method="post" id="cobro" data-total="{{ p.total }}">
+  {{ csrf() }}
+  <label class="casilla"><input type="checkbox" name="dividido" value="1" id="dividido" {% if dividido %}checked{% endif %}> ¿Pago dividido? Usar varios métodos</label>
+  <div id="simple">
+    <label>Método de pago</label>
+    <div class="segmentos">
+      {% for m in metodos %}<label><input type="radio" name="metodo" value="{{ m.codigo }}" {% if f.get('metodo','EFECTIVO') == m.codigo %}checked{% endif %}><span>{{ m.nombre }}</span></label>{% endfor %}
+    </div>
+    <label for="valor">Valor recibido</label>
+    <input id="valor" name="valor" inputmode="numeric" value="{{ f.get('valor','') }}">
+  </div>
+  <div id="varios" hidden>
+    {% for m in metodos %}<label for="v{{ m.codigo }}">Valor en {{ m.nombre }}</label>
+    <input id="v{{ m.codigo }}" class="parte" data-metodo="{{ m.codigo }}" name="valor_{{ m.codigo }}" inputmode="numeric" value="{{ f.get('valor_' ~ m.codigo,'') }}">{% endfor %}
+  </div>
+  <div class="aviso ok fila" id="resumen"></div>
+  <button class="boton" name="accion" value="confirmar" id="confirmar-pago">Confirmar pago</button>
+  <button class="boton gris" name="accion" value="fallido" id="fallido">Tarjeta/Nequi no se completó</button>
+</form>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='caja.js') }}"></script>{% endblock %}

@@ -1,9 +1,62 @@
-from flask import Blueprint, g, redirect, render_template, request, url_for
+from datetime import date
+
+from flask import Blueprint, flash, g, redirect, render_template, request, url_for
 
 from controladores.comun import ejecutar, requiere, servicio
+from modelos.pagos import ESTRATEGIAS
+from servicios.errores import ErrorNegocio
 
 bp = Blueprint("admin", __name__, url_prefix="/admin")
 solo_admin = requiere("ADMINISTRADOR")
+
+
+# ---------- Caja (CU-05) ----------
+@bp.route("/caja")
+@solo_admin
+def caja():
+    return render_template("admin/caja.html", pedidos=servicio("pedidos").listar(["ENTREGADO"]))
+
+
+@bp.route("/caja/<int:id_>", methods=["GET", "POST"])
+@solo_admin
+def cobrar(id_):
+    p = servicio("pedidos").obtener(id_)
+    if p["estado"] != "ENTREGADO":
+        flash("solo se pueden cobrar pedidos en estado Entregado", "error")
+        return redirect(url_for("admin.caja"))
+    f = request.form
+    dividido = f.get("dividido") == "1"
+    if request.method == "POST":
+        if dividido:
+            pagos = [{"metodo": c, "valor": f.get(f"valor_{c}", "").strip(), "completado": True}
+                     for c in ESTRATEGIAS if f.get(f"valor_{c}", "").strip()]
+        else:
+            pagos = [{"metodo": f.get("metodo"), "valor": f.get("valor"),
+                      "completado": f.get("accion") != "fallido"}]
+        if f.get("accion") == "fallido" and dividido:
+            flash("pago no completado, elija otro método", "error")
+        else:
+            try:
+                mensaje = servicio("pagos").procesar_pago(id_, pagos, g.usuario, dividido)
+            except ErrorNegocio as e:
+                flash(e.mensaje, "error")
+            else:
+                flash(mensaje, "ok")
+                return redirect(url_for("admin.comprobante", id_=id_))
+    return render_template("admin/cobrar.html", p=p, metodos=ESTRATEGIAS.values(), f=f,
+                           dividido=dividido)
+
+
+@bp.route("/pagos/<int:id_>")
+@solo_admin
+def comprobante(id_):
+    p = servicio("pedidos").obtener(id_)
+    pagos = servicio("pagos").pagos_de(id_)
+    if not pagos:
+        return redirect(url_for("admin.caja"))
+    mesa = next((m for m in servicio("mesas").listar() if m["id"] == p["id_mesa"]), None)
+    return render_template("admin/comprobante.html", p=p, pagos=pagos, mesa=mesa,
+                           metodos=ESTRATEGIAS)
 
 
 @bp.route("/cancelaciones")
@@ -84,3 +137,13 @@ def modificar_usuario(rol, id_):
             activo = request.form.get("accion") == "activar"
             ejecutar(lambda: s.cambiar_activo(rol, id_, activo, g.usuario), "usuario actualizado")
     return redirect(url_for("admin.usuarios"))
+
+
+@bp.route("/reportes")
+@solo_admin
+def reportes():
+    desde = request.args.get("desde") or date.today().isoformat()
+    hasta = request.args.get("hasta") or date.today().isoformat()
+    metodos, productos, total = servicio("reportes").ventas(desde, hasta)
+    return render_template("admin/reportes.html", desde=desde, hasta=hasta,
+                           metodos=metodos, productos=productos, total=total)
