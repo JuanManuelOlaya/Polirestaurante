@@ -13,8 +13,10 @@ from database import datos_iniciales
 from database.conexion import BaseDatos
 from servicios.auth_service import AuthService
 from servicios.mesa_service import MesaService
+from servicios.pago_service import PagoService
 from servicios.pedido_service import PedidoService
 from servicios.producto_service import ProductoService
+from servicios.reporte_service import ReporteService
 
 
 def _clave_secreta(carpeta):
@@ -38,7 +40,8 @@ def crear_app(ruta_bd=config.RUTA_BD):
     pedidos = PedidoService(bd, mesas)
     app.extensions["servicios"] = {
         "auth": AuthService(bd), "mesas": mesas, "pedidos": pedidos,
-        "productos": ProductoService(bd),
+        "productos": ProductoService(bd), "pagos": PagoService(bd, pedidos, mesas),
+        "reportes": ReporteService(bd),
     }
     registrar_comunes(app)
     for modulo in (auth_controller, mesero_controller, cocina_controller,

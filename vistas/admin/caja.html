@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% from "macros.html" import destino, etiqueta %}
+{% block titulo %}Caja{% endblock %}
+{% block contenido %}
+<div id="vivo">
+  {% for p in pedidos %}
+  <a class="tarjeta" href="{{ url_for('admin.cobrar', id_=p.id) }}">
+    <div class="fila"><b class="morado">{{ destino(p) }}</b><small>#{{ p.id }}</small></div>
+    <div class="fila">{{ etiqueta(p.estado) }}<b>{{ p.total|pesos }}</b></div></a>
+  {% else %}<p class="centro suave">No hay pedidos por cobrar</p>{% endfor %}
+</div>
+{% endblock %}

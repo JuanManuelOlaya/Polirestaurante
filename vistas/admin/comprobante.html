@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% from "macros.html" import lineas, destino %}
+{% block titulo %}Pago registrado{% endblock %}
+{% block contenido %}
+<div class="centro"><div class="logo exito">✓</div><h2>Pedido #{{ p.id }} · Pagado</h2><p>{{ destino(p) }}</p></div>
+<section class="tarjeta">
+  {{ lineas(p) }}
+  <ul class="lineas">
+    <li><span>Total</span><b>{{ p.total|pesos }}</b></li>
+    {% for g_ in pagos %}
+    <li><span>Método</span><b>{{ metodos[g_.metodo].nombre }}</b></li>
+    <li><span>Valor recibido</span><b>{{ g_.valor_recibido|pesos }}</b></li>
+    {% endfor %}
+    <li><span>Cambio a entregar</span><b class="verde">{{ pagos|sum(attribute='cambio')|pesos }}</b></li>
+    {% if mesa %}<li><span>Mesa {{ '%02d' % mesa.numero }}</span><b>{{ mesa.estado|capitalize }}</b></li>{% endif %}
+  </ul>
+  <small>Registrado: {{ pagos[0].fecha_pago }} · {{ pagos[0].administrador }}</small>
+</section>
+<button type="button" class="boton no-imprimir" id="imprimir">Imprimir comprobante</button>
+<p class="suave centro no-imprimir">Si la impresión falla, el pago sigue registrado: vuelva a presionar el botón para reintentar.</p>
+<a class="boton no-imprimir" href="{{ url_for('admin.caja') }}">Volver a caja</a>
+{% endblock %}

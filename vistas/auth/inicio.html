@@ -17,12 +17,12 @@
   {{ opcion(url_for('mesero.mis_pedidos'), 'Mis pedidos', 'Estado de cada pedido', contador) }}
 {% elif rol == 'COCINA' %}
   {{ opcion(url_for('cocina.pedidos'), 'Pedidos entrantes', 'En orden de llegada y detalle', contador) }}
-{% elif rol == 'ADMINISTRADOR' %}
+{% else %}
+  {{ opcion(url_for('admin.caja'), 'Caja', 'Cobrar cuentas') }}
   {{ opcion(url_for('admin.cancelaciones'), 'Autorizar cancelaciones', 'Con clave del administrador') }}
   {{ opcion(url_for('admin.menu'), 'Gestión del menú', 'Productos y disponibilidad') }}
   {{ opcion(url_for('admin.usuarios'), 'Usuarios', 'Cuentas y roles') }}
-{% else %}
-  <p class="suave">Módulo en construcción.</p>
+  {{ opcion(url_for('admin.reportes'), 'Reportes de ventas', 'Por método y producto') }}
 {% endif %}
 </div>
 <form method="post" action="{{ url_for('auth.logout') }}">{{ csrf() }}<button class="boton pie">Cerrar sesión</button></form>
